@@ -1,0 +1,16 @@
+.header {
+    display: grid;
+    grid-template-columns: 4fr 6fr;
+    background-color: rgb(161, 161, 161);
+    padding: 10px;
+}
+
+.header1 {
+    display: flex;
+    justify-content: center;
+}
+
+.header2 {
+    display: flex;
+    justify-content: center;
+}
