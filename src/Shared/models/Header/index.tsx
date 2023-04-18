@@ -33,6 +33,11 @@ const Header = observer(() => {
                     navigate('/login')
                 }}>Войти</Button>
             }
+            {(userState.user.role === 'MANAGER') &&
+                <Button type="default" onClick={() => {
+                    navigate('/manager')
+                }}>Панель менеджера</Button>
+            }
             {(userState.user.role === 'ADMIN') &&
                 <Button type="default" onClick={() => {
                     navigate('/admin')

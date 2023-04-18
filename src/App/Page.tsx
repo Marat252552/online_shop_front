@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react"
 import { Context } from "./App"
 import { observer } from 'mobx-react-lite'
-import { AdminRoutes, PublicRoutes } from "./routes"
+import { AdminRoutes, ManagerRoutes, PublicRoutes } from "./routes"
 import { Routes, Route, Navigate } from 'react-router-dom'
 import LoggedAPI from "../Shared/api/LoggedAPI"
 
@@ -28,6 +28,10 @@ const Page = observer(() => {
                 return <Route key={route.path} path={route.path} element={<Component />} />
             })}
             {userState.user.role === 'ADMIN' && AdminRoutes.map(route => {
+                let Component = route.Component
+                return <Route key={route.path} path={route.path} element={<Component />} />
+            })}
+            {userState.user.role === 'MANAGER' && ManagerRoutes.map(route => {
                 let Component = route.Component
                 return <Route key={route.path} path={route.path} element={<Component />} />
             })}

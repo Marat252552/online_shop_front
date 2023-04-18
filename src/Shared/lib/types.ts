@@ -8,3 +8,33 @@ export type User_T = {
         id: number
     }
 }
+
+export type Brand_T = {
+    id: number,
+    name: string,
+    imgName: string,
+    createdAt: string,
+    updatedAt: string
+}
+
+export type Type_T = {
+    id: number,
+    name: string,
+    createdAt: string,
+    updatedAt: string
+}
+
+export type Item_T = {
+    id: number,
+    name: string,
+    description: string,
+    price: number,
+    rating: number,
+    imgName: string,
+    createdAt: string,
+    updatedAt: string,
+    brandId: number,
+    typeId: number,
+    brand: Brand_T,
+    type: Type_T
+}
