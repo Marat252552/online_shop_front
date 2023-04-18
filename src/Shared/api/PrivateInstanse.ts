@@ -1,6 +1,4 @@
 import axios from 'axios'
-import { useContext } from 'react'
-import { Context } from '../../App/App'
 
 export const PrivateInstanse = axios.create({
     withCredentials: true,
@@ -12,9 +10,12 @@ export const PrivateInstanse = axios.create({
 
 // Interceptor, устанавливающий в headers каждого запроса AccessToken
 PrivateInstanse.interceptors.request.use((config: any) => {
+    console.log(localStorage.getItem('_AccessToken'))
     config.headers.Authorization = `Bearer ${localStorage.getItem('_AccessToken')}`
     return config
 })
+
+
 
 // Interceptor, отлавливающий ошибку, которую вызывает отсутствие AccessToken-а, и посылающий запрос на получение новой пары токенов
 PrivateInstanse.interceptors.response.use((config: any) => {
@@ -26,6 +27,7 @@ PrivateInstanse.interceptors.response.use((config: any) => {
         try {
             let response = await PrivateInstanse.get('/auth/refresh')
             localStorage.setItem('_AccessToken', response.data.AccessToken)
+            localStorage.setItem('_role', 'ADMIN')
             return PrivateInstanse.request(OriginalRequest)
         } catch (e) {
             console.log(e)

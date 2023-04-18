@@ -21,7 +21,6 @@ const Header = observer(() => {
             console.log(e)
         }   
     }
-    console.log(userState.user.role)
     return <div className={styles.header}>
         <div className={styles.header1}>
             <NavLink to='/' style={{color: 'white', textDecoration: 'none'}}>КупитьВсе</NavLink>
@@ -36,7 +35,7 @@ const Header = observer(() => {
             }
             {(userState.user.role === 'ADMIN') &&
                 <Button type="default" onClick={() => {
-                    userState.setIsAuth(false)
+                    navigate('/admin')
                 }}>Панель администратора</Button>
             }
         </div>

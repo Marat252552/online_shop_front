@@ -1,3 +1,5 @@
+import AdminPage from "../Pages/AdminPage"
+import AccessControlPage from "../Pages/AdminPage/models/Access"
 import LoginPage from "../Pages/AuthPage/models/LoginPage"
 import SigninPage from "../Pages/AuthPage/models/SigninPage"
 import ShopPage from "../Pages/ShopPage"
@@ -19,6 +21,13 @@ export const PublicRoutes = [
     }
 ]
 
-export const PrivateRoutes = [
-    
+export const AdminRoutes = [
+    {
+        path: '/admin',
+        Component: AdminPage
+    },
+    {
+        path: '/accesscontrol',
+        Component: AccessControlPage
+    },
 ]

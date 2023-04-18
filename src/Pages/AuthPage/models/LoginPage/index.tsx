@@ -12,8 +12,8 @@ const LoginPage: React.FC = () => {
         let response = await LoginAPI(values.login, values.password, values.remember)
         if (response.status === 200) {
             userState.setIsAuth(true)
-            userState.setToken(response.data.AccessToken)
             userState.setUser(response.data.user)
+            localStorage.setItem('_AccessToken', response.data.AccessToken)
             navigate('/')
         }
     }
