@@ -1,0 +1,20 @@
+.header {
+    display: grid;
+    grid-template-columns: 4fr 6fr;
+    background-color: rgb(21, 157, 255);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.header1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: solid 1px red */
+}
+
+.header2 {
+    display: flex;
+    justify-content: end;
+    /* border: solid 1px red */
+}
