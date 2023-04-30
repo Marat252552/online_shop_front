@@ -1,5 +1,6 @@
 import {Container} from '@material-ui/core'
 import {makeStyles} from '@material-ui/core/styles'
+import { forwardRef } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -10,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const MainContainer = ({children, ...props}: any) => {
+const MainContainer = ({children, ref, ...props}: any) => {
     const styles = useStyles()
     return <Container maxWidth='xs' className={styles.root} {...props}>
         {children}

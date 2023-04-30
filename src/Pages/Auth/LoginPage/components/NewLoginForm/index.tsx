@@ -16,7 +16,7 @@ import LoginAPI from "../../api/loginAPI"
 import { Context } from "../../../../../App/App"
 
 const NewLoginForm = (props: {openNotif: (message: string) => void}) => {
-    const { register, handleSubmit, formState: { errors } } = useForm<Inputs_T>({
+    const { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm<Inputs_T>({
         mode: 'onSubmit'
     })
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -59,8 +59,8 @@ const NewLoginForm = (props: {openNotif: (message: string) => void}) => {
                         label='Логин'
                     />
                     <PasswordInput
-                        error={errors.password}
-                        helperText={errors.password?.message}
+                        error={errors.password || null}
+                        helperText={errors.password?.message || null}
                         label='Пароль'
                         {...register('password', {
                             required: 'Введите пароль',
@@ -73,7 +73,9 @@ const NewLoginForm = (props: {openNotif: (message: string) => void}) => {
                     <MyCheckbox {...label}
                         {...register('checkbox')}
                         defaultChecked />
-                    <PrimaryButton loading={loading}>Войти</PrimaryButton>
+                    <PrimaryButton 
+                    disabled={!isDirty || !isValid}
+                    loading={loading}>Войти</PrimaryButton>
                 </Form>
                 <p><NavLink to={'/signin'}>Зарегистрироваться</NavLink></p>
                 <p><NavLink to={'/'}>Продолжить без входа</NavLink></p>

@@ -14,11 +14,12 @@ import MyCheckbox from "../../../../../Shared/UI/formComponents/checkbox"
 import { NavLink, useNavigate } from "react-router-dom"
 import SigninAPI from "../../api/SigninAPI"
 import { Context } from "../../../../../App/App"
+import IsduplAPI from "../../api/IsduplAPI"
 
-const NewSigninForm = () => {
+const NewSigninForm = (props: { openNotif: (message: string) => void }) => {
     let navigate = useNavigate()
-    let {userState} = useContext(Context)
-    const { register, handleSubmit, formState: { errors } } = useForm<Inputs_T>({
+    let { userState } = useContext(Context)
+    const { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm<Inputs_T>({
         mode: 'onChange'
     })
     let [loading, setLoading] = useState(false)
@@ -27,13 +28,13 @@ const NewSigninForm = () => {
         setLoading(true)
         try {
             let response = await SigninAPI(values.login, values.password, values.remember)
-            if(response.status === 201) {
+            if (response.status === 201) {
                 userState.setIsAuth(true)
                 localStorage.setItem('AccessToken', response.data.AccessToken)
                 userState.setUser(response.data.user)
                 navigate('/')
             }
-        } catch(e) {
+        } catch (e) {
             console.log(e)
         } finally {
             setLoading(false)
@@ -52,6 +53,14 @@ const NewSigninForm = () => {
                             pattern: {
                                 value: /^[a-z0-9]+$/i,
                                 message: 'Допустимы только латинские символы'
+                            },
+                            validate: async (value) => {
+                                try {
+                                    await IsduplAPI(value)
+                                } catch (e) {
+                                    console.log(e)
+                                    return 'Логин занят'
+                                }
                             }
                         })}
                         type='text'
@@ -59,8 +68,8 @@ const NewSigninForm = () => {
                     />
                     <PasswordInput
                         label='Пароль'
-                        error={errors.password}
-                        helperText={errors.password?.message}
+                        error={errors.password || null}
+                        helperText={errors.password?.message || null}
                         {...register('password', {
                             required: 'Введите пароль',
                             pattern: {
@@ -71,27 +80,28 @@ const NewSigninForm = () => {
                     />
                     <PasswordInput
                         label='Подтвердите пароль'
-                        error={errors.password2}
-                        helperText={errors.password2?.message}
+                        error={errors.password2 || null}
+                        helperText={errors.password2?.message || null}
                         {...register('password2', {
                             required: 'Подтвердите пароль',
                             validate: (value, formValues) => {
-                                if(value !== formValues.password) {
+                                if (value !== formValues.password) {
                                     return 'Пароли не совпадают'
                                 }
-                                console.log(value, formValues)
                             }
                         })}
                     />
                     <MyCheckbox {...label}
                         {...register('remember')}
                         defaultChecked />
-                    <PrimaryButton loading={loading}>Войти</PrimaryButton>
+                    <PrimaryButton
+                        disabled={!isDirty || !isValid}
+                        loading={loading}>Войти</PrimaryButton>
                 </Form>
                 <p><NavLink to={'/login'}>Перейти на страницу входа</NavLink></p>
                 <p><NavLink to={'/'}>Продолжить без входа</NavLink></p>
 
-                 
+
             </MainContainer>
         </StyledEngineProvider>
     </div>

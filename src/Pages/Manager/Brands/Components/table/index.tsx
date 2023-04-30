@@ -1,7 +1,7 @@
 import { Button, Pagination, Table } from "antd";
-import { Brand_T, Item_T, Type_T } from "../../lib/types";
+import { Brand_T, Item_T, Type_T } from "../../../../../Shared/lib/types";
 import { useEffect, useState } from "react";
-import GetBrandsAPI from "../../api/GetBrandsAPI";
+import GetBrandsAPI from "../../../../../Shared/api/GetBrandsAPI";
 
 
 const MakeTable = () => {
@@ -12,7 +12,7 @@ const MakeTable = () => {
     useEffect(() => {
         let getBrands = async () => {
             let response = await GetBrandsAPI(offset, limit)
-            if(response.status === 200) {
+            if (response.status === 200) {
                 setBrands(response.data.brands)
                 setAmount(response.data.brandsAmount)
             }
@@ -30,9 +30,9 @@ const MakeTable = () => {
             title: 'Логотип',
             dataIndex: '',
             key: 'name',
-            render: (text: string, brand: Brand_T) => <img 
-            width='40px'
-            src={'http://localhost:3000/' + brand.imgName}
+            render: (text: string, brand: Brand_T) => <img
+                width='40px'
+                src={'http://localhost:3000/' + brand.imgName}
             />,
         },
         {
@@ -47,8 +47,11 @@ const MakeTable = () => {
         },
     ];
     return <div style={{ border: 'solid 1px black', width: '100%' }}>
-        <Table columns={columns} dataSource={brands} pagination={false}/>
-        <Pagination defaultCurrent={1} total={amount} defaultPageSize={5} onChange={(page) => {setOffset((page - 1)*limit)}} onShowSizeChange={(e, e2) => console.log(e, e2)}/>
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+            <Pagination defaultCurrent={1} total={amount} defaultPageSize={5} onChange={(page) => { setOffset((page - 1) * limit) }} onShowSizeChange={(e, e2) => console.log(e, e2)} />
+        </div>
+        <Table columns={columns} dataSource={brands} pagination={false} />
+
     </div>
 }
 

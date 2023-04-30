@@ -18,9 +18,6 @@ const SimpleTemplate = (props: { children: any }) => {
     })
     const openNotif = (message: string) => {
         setState({...state, message, open: true})
-        setTimeout(() => {
-            setState({...state, open: false})
-        }, 5000)
     }
     const handleClose = () => {
         setState({ ...state, open: false });

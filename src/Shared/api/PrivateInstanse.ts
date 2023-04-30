@@ -10,7 +10,6 @@ export const PrivateInstanse = axios.create({
 
 // Interceptor, устанавливающий в headers каждого запроса AccessToken
 PrivateInstanse.interceptors.request.use((config: any) => {
-    console.log(localStorage.getItem('_AccessToken'))
     config.headers.Authorization = `Bearer ${localStorage.getItem('_AccessToken')}`
     return config
 })

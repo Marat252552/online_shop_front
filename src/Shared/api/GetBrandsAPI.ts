@@ -3,8 +3,8 @@ import { GetBrandsAPI_T } from "./types"
 
 
 
-const GetBrandsAPI: GetBrandsAPI_T = (offset: number = 0, limit: number = 100) => {
-    return PublicInstanse.get(`/brands?offset=${offset}&limit=${limit}`)
+const GetBrandsAPI: GetBrandsAPI_T = (offset?: number, limit?: number) => {
+    return PublicInstanse.get(`/brands?offset=${offset || 0}&limit=${limit || 100}`)
 }
 
 export default GetBrandsAPI

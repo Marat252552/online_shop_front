@@ -6,10 +6,9 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import LoggedAPI from "../Shared/api/LoggedAPI"
 
 const Page = observer(() => {
-    useEffect(() => {
-        console.log(localStorage.getItem('AccessToken'))
-    }, [localStorage.getItem('AccessToken')])
-    
+    // useEffect(() => {
+    //     console.log(localStorage.getItem('AccessToken'))
+    // }, [localStorage.getItem('AccessToken')])
     // localStorage.clear()
     let { userState } = useContext(Context)
     useEffect(() => {
@@ -22,9 +21,6 @@ const Page = observer(() => {
         }
         a()
     }, [])
-    useEffect(() => {
-        console.log(userState.isAuth)
-    }, [userState.isAuth])
     return <div>
         <Routes>
             {PublicRoutes.map(route => {

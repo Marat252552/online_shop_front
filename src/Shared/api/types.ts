@@ -2,12 +2,12 @@ import { AxiosResponse } from "axios";
 import { Brand_T, Item_T, Type_T } from "../lib/types";
 
 
-export type GetBrandsAPI_T = (offset: number, limit: number) => Promise<AxiosResponse<{
+export type GetBrandsAPI_T = (offset?: number, limit?: number) => Promise<AxiosResponse<{
     brands: Array<Brand_T>,
     brandsAmount: number
 }, any>>
 
-export type GetTypesAPI_T = (offset: number, limit: number) => Promise<AxiosResponse<{
+export type GetTypesAPI_T = (offset?: number, limit?: number) => Promise<AxiosResponse<{
     types: Array<Type_T>,
     typesAmount: number
 }, any>>
