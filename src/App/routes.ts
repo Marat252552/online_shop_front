@@ -5,11 +5,11 @@ import ManagerPage from "../Pages/Manager/ManagerPage"
 import BrandsPage from "../Pages/Manager/Brands"
 import CreateBrandPage from "../Pages/Manager/Brands/CreateBrandPage"
 import ItemsPage from "../Pages/Manager/Items"
-import CreateItemPage from "../Pages/Manager/Items/CreateItemPage"
 // import TypesPage from "../2.Pages/Manager/TypesPage"
 // import CreateTypePage from "../2.Pages/Manager/TypesPage/Models/CreateBrandPage"
 import ShopPage from "../Pages/Shop/ShopPage"
 import SignInPage from "../Pages/Auth/SigninPage"
+import CreateItemPage from "../Pages/Manager/Items/CreateItemPage"
 
 
 
@@ -41,12 +41,12 @@ export const ManagerRoutes = [
         Component: ManagerPage
     },
     {
-        path: '/items',
-        Component: ItemsPage
-    },
-    {
         path: '/items/create',
         Component: CreateItemPage
+    },
+    {
+        path: '/items',
+        Component: ItemsPage
     },
     // {
     //     path: '/types',
@@ -57,11 +57,11 @@ export const ManagerRoutes = [
     //     Component: CreateTypePage
     // },
     {
-        path: '/brands',
-        Component: BrandsPage
-    },
-    {
         path: '/brands/create',
         Component: CreateBrandPage
+    },
+    {
+        path: '/brands',
+        Component: BrandsPage
     },
 ]

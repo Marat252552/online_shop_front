@@ -6,6 +6,18 @@ import styles from './lib/styles.module.css'
 import {NavLink} from 'react-router-dom'
 import {useNavigate} from 'react-router-dom'
 import LogoutAPI from "./api/LogoutAPI"
+import Typography from "@material-ui/core/Typography"
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        fontFamily: 'Permanent Marker',
+        // margin: theme.spacing(3, 0, 2),
+        textAlign: 'center',
+        fontSize: '20px',
+        color: 'white'
+    }
+}))
 
 const Header = observer(() => {
     const navigate = useNavigate()
@@ -21,9 +33,15 @@ const Header = observer(() => {
             console.log(e)
         }   
     }
+    let styles2 = useStyles()
     return <div className={styles.header}>
         <div className={styles.header1}>
-            <NavLink to='/' style={{color: 'white', textDecoration: 'none', fontSize: '30px'}}>КупитьВсе.com</NavLink>
+            <NavLink to='/' style={{color: 'white', textDecoration: 'none', fontSize: '30px'}}>
+                <Typography className={styles2.root} component='h1' variant='h5'>
+                    BuyAll.com
+                </Typography>
+                
+                </NavLink>
         </div>
         <div className={styles.header2}>
             {(userState.isAuth) ?

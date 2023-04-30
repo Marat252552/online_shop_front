@@ -7,7 +7,9 @@
 }
 
 .form {
-    border: solid 1px rgb(21, 157, 255);
+    display: flex;
+    justify-content: center;
     padding: 20px;
     border-radius: 10px;
+    width: 100%;
 }
