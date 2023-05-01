@@ -22,13 +22,13 @@ const MakeTable = (props: {openDeleteItemModal: any, deleteItem: any, amount: nu
             title: 'Категория',
             dataIndex: 'type',
             key: 'type',
-            render: (type: Type_T) => <a>{type.name}</a>,
+            render: (type: Type_T) => <a>{type?.name}</a>,
         },
         {
             title: 'Производитель',
             dataIndex: 'brand',
             key: 'brand',
-            render: (brand: Brand_T) => <a>{brand.name}</a>,
+            render: (brand: Brand_T) => <a>{brand?.name}</a>,
         },
         {
             title: 'Рейтинг',
@@ -49,7 +49,6 @@ const MakeTable = (props: {openDeleteItemModal: any, deleteItem: any, amount: nu
     ];
     return <div style={{width: '100%'}}>
         <Table columns={columns} dataSource={props.items} pagination={false}/>
-        <Pagination defaultCurrent={1} defaultPageSize={5} total={props.amount} onChange={(page) => {props.setOffset((page - 1)*props.limit)}} onShowSizeChange={(e, e2) => console.log(e, e2)}/>
     </div>
 }
 

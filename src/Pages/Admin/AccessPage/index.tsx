@@ -1,46 +1,53 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Space, Table, Tag } from 'antd';
 import GetUsersAPI from './api/GetUsersAPI';
 import Header from '../../../Shared/UI/Header';
 import { User_T } from '../../../Shared/lib/types';
 import ChangeAccessAPI from './api/GrantAccessAPI';
 import Menu from '../../../Shared/UI/Menu';
-import SearchInput from '../../../Shared/UI/SearchInput';
 import styles from './lib/styles.module.css'
 import MainTemplate from '../../../Templates/MainTemplate';
 import { useNavigate } from 'react-router-dom';
+import Tags from '../../../Shared/UI/Tags';
+import PaginationF from '../../../Shared/UI/Pagination/pagination';
+import Form from '../../../Shared/UI/formComponents/form';
+import { useForm } from 'react-hook-form';
+import SearchInput from '../../../Shared/UI/SearchInput';
 
 const AccessControlPage = () => {
+    let [offset, setOffset] = useState(0)
+    let [limit, setLimit] = useState(5)
+    let [total, setTotal] = useState(0)
+    let [tags, setTags] = useState(['USER', 'MANAGER'])
     let [users, setUsers] = useState([
         { login: 'Jack Peterson', role: 'MANAGER' }
     ])
+    let [searchValue, setSearchValue] = useState('')
+    let fetchUsers = async () => {
+        try {
+            let response = await GetUsersAPI(tags, searchValue, offset, limit)
+            if (response.status === 200) {
+                setUsers(response.data.users)
+                setTotal(response.data.usersAmount)
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
     const SetAccess = async (user: User_T, action: boolean) => {
         let response
-        if(action) {
+        if (action) {
             response = await ChangeAccessAPI(user.id, 'MANAGER')
         } else {
             response = await ChangeAccessAPI(user.id, 'USER')
         }
         if (response.status === 200) {
-            let response2 = await GetUsersAPI()
-            if (response2.status === 200) {
-                setUsers(response2.data.users)
-            }
+            fetchUsers()
         }
     }
     useEffect(() => {
-        let a = async () => {
-            try {
-                let response = await GetUsersAPI()
-                if (response.status === 200) {
-                    setUsers(response.data.users)
-                }
-            } catch (e) {
-                console.log(e)
-            }
-        }
-        a()
-    }, [])
+        fetchUsers()
+    }, [offset, limit, tags, searchValue])
     const columns = [
         {
             title: 'Логин',
@@ -67,13 +74,15 @@ const AccessControlPage = () => {
     ];
     return <>
         <MainTemplate
-            BodyChildren={<Table columns={columns} dataSource={users} />}
+            BodyChildren={<>
+                <PaginationF limit={limit} setOffset={setOffset} total={total} />
+                <Table pagination={false} columns={columns} dataSource={users} />
+            </>}
             MenuChildren={<>
-                <SearchInput />
-                <Button>Поиск</Button>
+                <SearchInput setSearchValue={setSearchValue} />
+                <Tags setTags={setTags} />
             </>} />
     </>
-
 }
 
 export default AccessControlPage

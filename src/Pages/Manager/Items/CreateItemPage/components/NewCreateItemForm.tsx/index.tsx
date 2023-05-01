@@ -21,13 +21,14 @@ const NewCreateItemForm = (props: {openNotif: (message: string) => void}) => {
     let { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm<Inputs_T>({
         mode: 'onSubmit'
     })
-    let [brands, setBrands]: [Array<Brand_T>, any] = useState([])
     let [types, setTypes]: [Array<Type_T>, any] = useState([])
+    let [brands, setBrands]: [Array<Brand_T>, any] = useState([])
     // Подгрузка категорий и производителей
     useEffect(() => {
         let fetchBrands = async () => {
             try {
-                let response = await GetBrandsAPI()
+                // Пропуск 0, лимит 1000, значение поиска '' т.е. ничего не ищем
+                let response = await GetBrandsAPI(0, 1000, '')
                 if (response.status === 200) {
                     setBrands(response.data.brands)
                 }
@@ -38,7 +39,8 @@ const NewCreateItemForm = (props: {openNotif: (message: string) => void}) => {
         }
         let fetchTypes = async () => {
             try {
-                let response = await GetTypesAPI()
+                // Пропуск 0, лимит 1000, значение поиска '' т.е. ничего не ищем
+                let response = await GetTypesAPI(0, 1000, '')
                 if (response.status === 200) {
                     setTypes(response.data.types)
                 }

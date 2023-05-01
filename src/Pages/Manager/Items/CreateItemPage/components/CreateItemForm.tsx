@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import {
@@ -24,26 +23,42 @@ import { useNavigate } from 'react-router-dom';
 
 
 const CreateItemForm: React.FC = () => {
+    console.log('--------------')
     const navigate = useNavigate()
     const [types, setTypes]: [Array<Type_T>, any] = useState([] as any)
     const [brands, setBrands]: [Array<Brand_T>, any] = useState([] as any)
+    // GetTypesAPI settings
+    let [offset, setOffset] = useState(0)
+    let [limit, setLimit] = useState(5)
+    let [searchValue, setSearchValue] = useState('')
     let [file, setFile] = useState()
-    useEffect(() => {
-        let getBrands = async () => {
+    let getTypes = async () => {
+        console.log('------------', offset, limit, searchValue)
+        try {
+            console.log('------------', offset, limit, searchValue)
+            let response = await GetTypesAPI(offset, limit, searchValue)
+            console.log(response.data)
+            if (response.status === 200) {
+                setTypes(response.data.types)
+            }
+        } catch(e) {
+            console.log(e)
+        }
+    }
+    let getBrands = async () => {
+        try {
             let response = await GetBrandsAPI()
             if (response.status === 200) {
                 setBrands(response.data.brands)
             }
+        } catch(e) {
+            console.log(e)
         }
-        let getTypes = async () => {
-            let response = await GetTypesAPI()
-            if (response.status === 200) {
-                setTypes(response.data.types)
-            }
-        }
+    }
+    useEffect(() => {
         getBrands()
         getTypes()
-    }, [])
+    }, [offset, limit, searchValue])
     const onSubmit = async (values: {name: string, price: string, typeId: string, brandId: string, description: string, img: {file: any}}) => {
         let formData = new FormData()
         formData.append('name', values.name)

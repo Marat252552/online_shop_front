@@ -2,8 +2,13 @@ import PublicInstanse from "./PublicInstanse"
 import { GetTypesAPI_T } from "./types"
 
 
-const GetTypesAPI: GetTypesAPI_T = (offset?: number, limit?: number) => {
-    return PublicInstanse.get(`/types?offset=${offset || 0}&limit=${limit || 100}`)
+const GetTypesAPI: GetTypesAPI_T = (offset, limit, searchValue) => {
+    
+    return PublicInstanse.post(`/types/find`, {
+        offset,
+        limit,
+        searchValue
+    })
 }
 
 export default GetTypesAPI

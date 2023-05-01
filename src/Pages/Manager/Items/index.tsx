@@ -9,13 +9,47 @@ import { Button, Modal, Pagination } from 'antd';
 import { DeleteItemAPI } from './api/api';
 import { useNavigate } from 'react-router-dom';
 import SearchInput from '../../../Shared/UI/SearchInput';
+import Tags from '../../../Shared/UI/Tags';
+import GetTypesAPI from '../../../Shared/api/GetTypesAPI';
 
 
 const ItemsPage = () => {
     let navigate = useNavigate()
     let [limit, setLimit] = useState(5)
-    let [amount, setAmount] = useState(0)
     let [offset, setOffset] = useState(0)
+    let [brandId, setBrandId] = useState(0)
+    let [typeId, setTypeId] = useState(0)
+
+    // Категории товаров
+    let [types, setTypes] = useState<Array<Type_T>>([])
+    let [typesTagsData, setTypesTagsData] = useState<Array<{value: number, name: string}>>([])
+    let [typeTags, setTypeTags] = useState()
+        // Загрузка категорий
+    useEffect(() => {
+        let fetchTypes = async () => {
+            try {
+                let response = await GetTypesAPI(0, 1000, '')
+                if(response.status === 200) {
+                    setTypes(response.data.types)
+                }
+            } catch(e) {
+                console.log(e)
+            }
+            
+        }
+        fetchTypes()
+    }, [])
+        // Изменение state для компоненты с выбором тэгов
+    useEffect(() => {
+        let newTypesTagsData = types.map(el => ({
+            value: el.id,
+            name: el.name
+        }))
+        setTypesTagsData(newTypesTagsData)
+    }, [types])
+
+    // Производите ли товаров
+    let [brandTags, setBrandTags] = useState()
     // ID удаляемого товара
     let [id, setId] = useState(0)
     let [isModalOpen, setIsModalOpen] = useState(false)
@@ -47,6 +81,8 @@ const ItemsPage = () => {
             }
         }
     ])
+    let [searchValue, setSearchValue] = useState('')
+    let [total, setTotal] = useState(0)
     let openDeleteItemModal = (newId: number) => {
         setId(newId)
         setIsModalOpen(true)
@@ -61,26 +97,29 @@ const ItemsPage = () => {
                     setItems(response2.data.items)
                     setAmount(response2.data.itemsAmount)
                 }
-            } catch(e) {
+            } catch (e) {
                 console.log(e)
             } finally {
                 setLoading(false)
                 setIsModalOpen(false)
             }
-            
+
+        }
+    }
+    let fetchItems = async () => {
+        try {
+            let response = await GetItemsAPI(offset, limit, brandId, typeId, searchValue)
+            if (response.status === 200) {
+                setItems(response.data.items)
+                setTotal(response.data.itemsAmount)
+            }
+        } catch (e) {
+            console.log(e)
         }
     }
     useEffect(() => {
-        let a = async () => {
-            let response = await GetItemsAPI(offset, limit)
-            if (response.status === 200) {
-                setItems(response.data.items)
-                setAmount(response.data.itemsAmount)
-            }
-        }
-        a()
-    }, [offset, limit])
-
+        fetchItems()
+    }, [offset, limit, total, brandId, typeId, searchValue])
     return <div>
         <Header />
         <div style={{ display: 'flex', flexDirection: 'row', height: '100vh' }}>
@@ -89,15 +128,19 @@ const ItemsPage = () => {
                 open={isModalOpen}
                 onOk={deleteItem}
                 confirmLoading={loading}
-                onCancel={() => {setIsModalOpen(false)}}
+                onCancel={() => { setIsModalOpen(false) }}
             >
                 <p>Восстановить позицию невозможно</p>
             </Modal>
             <Menu>
-                <SearchInput />
-                <Button onClick={() => {navigate('/items/create')}}>Создать</Button>
+                <SearchInput setSearchValue={setSearchValue} />
+                <Button onClick={() => { navigate('/items/create') }}>Создать</Button>
+                <Tags name='Производители' setTags={setTypeTags} tagsData={typesTagsData}/>
             </Menu>
-            <MakeTable openDeleteItemModal={openDeleteItemModal} deleteItem={deleteItem} amount={amount} limit={limit} setLimit={setLimit} offset={offset} setOffset={setOffset} items={items} />
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <Pagination defaultCurrent={1} defaultPageSize={5} total={total} onChange={(page) => { setOffset((page - 1) * limit) }} onShowSizeChange={(e, e2) => console.log(e, e2)} />
+                <MakeTable openDeleteItemModal={openDeleteItemModal} deleteItem={deleteItem} amount={total} limit={limit} setLimit={setLimit} offset={offset} setOffset={setOffset} items={items} />
+            </div>
         </div>
     </div>
 

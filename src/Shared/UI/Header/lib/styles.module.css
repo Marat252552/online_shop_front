@@ -17,6 +17,7 @@
 
 .header2 {
     display: flex;
-    justify-content: end;
+    justify-content: center;
+    align-items: center;
     /* border: solid 1px red */
 }
