@@ -14,7 +14,7 @@ const MakeItem: MakeItem_T = (props) => {
         <p>{props.typeName}</p>
         <p>{props.name}</p>
         <span style={{ fontSize: '30px' }}>{props.price} Р</span>
-        <Button type='dashed' style={{ width: '100%' }}>Добавить в корзину</Button>
+        <Button type='dashed' style={{ width: '100%' }} onClick={() => {props.addToBasket(props.id)}}>Добавить в корзину</Button>
     </div>
 }
 

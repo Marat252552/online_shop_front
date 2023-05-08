@@ -9,7 +9,7 @@ export interface State extends SnackbarOrigin {
     message: string
 }
 
-const MainTemplate = (props: {MenuChildren?: any, BodyChildren?: any}) => {
+const MainTemplate = (props: {MenuChildren?: any, children?: any}) => {
     // Notification state
     let [state, setState] = useState<State>({
         open: false,
@@ -38,7 +38,7 @@ const MainTemplate = (props: {MenuChildren?: any, BodyChildren?: any}) => {
                 {props.MenuChildren}
             </Menu>
             <div style={{width: '100%'}}>
-                {React.cloneElement(props.BodyChildren, { openNotif })}
+                {React.cloneElement(props.children, { openNotif })}
             </div> 
         </div>
     </div>

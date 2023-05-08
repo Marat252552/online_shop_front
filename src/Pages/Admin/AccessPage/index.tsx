@@ -22,6 +22,10 @@ const AccessControlPage = () => {
     let [users, setUsers] = useState([
         { login: 'Jack Peterson', role: 'MANAGER' }
     ])
+    let [tagsData, setTagsData] = useState<Array<{ value: string, name: string }>>([
+        { value: 'USER', name: 'Пользователи' },
+        { value: 'MANAGER', name: 'Менеджеры' },
+    ])
     let [searchValue, setSearchValue] = useState('')
     let fetchUsers = async () => {
         try {
@@ -74,14 +78,15 @@ const AccessControlPage = () => {
     ];
     return <>
         <MainTemplate
-            BodyChildren={<>
-                <PaginationF limit={limit} setOffset={setOffset} total={total} />
-                <Table pagination={false} columns={columns} dataSource={users} />
-            </>}
             MenuChildren={<>
                 <SearchInput setSearchValue={setSearchValue} />
-                <Tags setTags={setTags} />
-            </>} />
+                <Tags name='Категории' tagsData={tagsData} setTags={setTags} />
+            </>}>
+            <>
+                <PaginationF limit={limit} setOffset={setOffset} total={total} />
+                <Table pagination={false} columns={columns} dataSource={users} />
+            </>
+        </MainTemplate>
     </>
 }
 

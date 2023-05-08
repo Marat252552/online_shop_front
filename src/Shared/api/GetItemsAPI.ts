@@ -3,14 +3,15 @@ import { GetItemsAPI_T } from "./types"
 
 
 
-const GetItemsAPI: GetItemsAPI_T = (offset, limit, brandId, typeId, searchValue) => {
+const GetItemsAPI: GetItemsAPI_T = (offset, limit, brandTags, typeTags, searchValue) => {
     return PublicInstanse.post(`/items/find`, {
         offset,
         limit,
-        brandId,
-        typeId,
+        brandTags,
+        typeTags,
         searchValue
     })
 }
+
 
 export default GetItemsAPI

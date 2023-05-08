@@ -38,3 +38,20 @@ export type Item_T = {
     brand: Brand_T,
     type: Type_T
 }
+
+export type BasketDevice_T = {
+    id: number,
+    createdAt: number,
+    updatedAt: number,
+    basketId: number,
+    itemId: number
+}
+
+export type Basket_T = {
+    id: number,
+    createdAt: number,
+    updatedAt: number,
+    userId: number,
+    basket_devices: Array<BasketDevice_T>
+}
+

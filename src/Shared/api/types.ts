@@ -12,7 +12,7 @@ export type GetTypesAPI_T = (offset: number, limit: number, searchValue: string)
     typesAmount: number
 }, any>>
 
-export type GetItemsAPI_T = (offset: number, limit: number, brandId: number, typeId: number, searchValue: string) => Promise<AxiosResponse<{
+export type GetItemsAPI_T = (offset: number, limit: number, brandTags: Array<number>, typeTags: Array<number>, searchValue: string) => Promise<AxiosResponse<{
     items: Array<Item_T>,
     itemsAmount: number
 }, any>>

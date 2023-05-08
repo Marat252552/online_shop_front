@@ -10,15 +10,20 @@ import {
 
     Upload,
 } from 'antd';
-import CreateTypeAPI from './api/api';
-import Header from '../../../../../../Shared/models/Header';
+// import { Brand_T, Type_T } from '../../../../../6.Shared/lib/types';
+// import GetBrandsAPI from '../../../../../6.Shared/api/GetBrandsAPI';
+// import GetTypesAPI from '../../../../../6.Shared/api/GetTypesAPI';
+import CreateBrandAPI from './api/api';
+import Header from '../../../../Shared/UI/Header';
 import { useNavigate } from 'react-router-dom';
+import CreateTypeAPI from './api/api';
 
 
 const CreateTypePage: React.FC = () => {
     let navigate = useNavigate()
     const onSubmit = async (values: {name: string}) => {
-        let response = await CreateTypeAPI(values.name)
+        let {name} = values
+        let response = await CreateTypeAPI(name)
         if(response.status === 200) {
             navigate('/types')
         }
@@ -33,6 +38,7 @@ const CreateTypePage: React.FC = () => {
                 style={{ maxWidth: 600 }}
                 onFinish={onSubmit}
             >
+                <h1>Форма создания категории</h1>
                 <Form.Item
                     label="Название"
                     name="name"

@@ -10,6 +10,9 @@ import ItemsPage from "../Pages/Manager/Items"
 import ShopPage from "../Pages/Shop/ShopPage"
 import SignInPage from "../Pages/Auth/SigninPage"
 import CreateItemPage from "../Pages/Manager/Items/CreateItemPage"
+import TypesPage from "../Pages/Manager/Types"
+import CreateTypePage from "../Pages/Manager/Types/CreateTypePage"
+import BasketPage from "../Pages/Shop/BasketPage"
 
 
 
@@ -25,6 +28,13 @@ export const PublicRoutes = [
     {
         path: '/',
         Component: ShopPage
+    }
+]
+
+export const UserRoutes = [
+    {
+        path: '/basket',
+        Component: BasketPage
     }
 ]
 
@@ -48,14 +58,14 @@ export const ManagerRoutes = [
         path: '/items',
         Component: ItemsPage
     },
-    // {
-    //     path: '/types',
-    //     Component: TypesPage
-    // },
-    // {
-    //     path: '/types/create',
-    //     Component: CreateTypePage
-    // },
+    {
+        path: '/types',
+        Component: TypesPage
+    },
+    {
+        path: '/types/create',
+        Component: CreateTypePage
+    },
     {
         path: '/brands/create',
         Component: CreateBrandPage

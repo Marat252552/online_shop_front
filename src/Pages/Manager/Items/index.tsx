@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import SearchInput from '../../../Shared/UI/SearchInput';
 import Tags from '../../../Shared/UI/Tags';
 import GetTypesAPI from '../../../Shared/api/GetTypesAPI';
+import GetBrandsAPI from '../../../Shared/api/GetBrandsAPI';
 
 
 const ItemsPage = () => {
@@ -23,7 +24,15 @@ const ItemsPage = () => {
     // Категории товаров
     let [types, setTypes] = useState<Array<Type_T>>([])
     let [typesTagsData, setTypesTagsData] = useState<Array<{value: number, name: string}>>([])
-    let [typeTags, setTypeTags] = useState()
+    let [typeTags, setTypeTags] = useState([])
+
+    // Производители товаров
+    let [brands, setBrands] = useState<Array<Brand_T>>([])
+    let [brandsOffset, setBrandsOffset] = useState(0)
+    let [brandsLimit, setBrandsLimit] = useState(1000)
+    let [brandsSearchValue, setBrandsSearchValue] = useState('')
+    let [brandsTagsData, setBrandsTagsData] = useState<Array<{value: number, name: string}>>([])
+    let [brandTags, setBrandTags] = useState([])
         // Загрузка категорий
     useEffect(() => {
         let fetchTypes = async () => {
@@ -37,7 +46,18 @@ const ItemsPage = () => {
             }
             
         }
+        let fetchBrands = async () => {
+            try {
+                let response = await GetBrandsAPI(brandsOffset, brandsLimit, brandsSearchValue)
+                if(response.status === 200) {
+                    setBrands(response.data.brands)
+                }
+            } catch(e) {
+                console.log(e)
+            }
+        }
         fetchTypes()
+        fetchBrands()
     }, [])
         // Изменение state для компоненты с выбором тэгов
     useEffect(() => {
@@ -45,11 +65,13 @@ const ItemsPage = () => {
             value: el.id,
             name: el.name
         }))
+        let newBrandsTagsData = brands.map(el => ({
+            value: el.id,
+            name: el.name
+        }))
         setTypesTagsData(newTypesTagsData)
-    }, [types])
-
-    // Производите ли товаров
-    let [brandTags, setBrandTags] = useState()
+        setBrandsTagsData(newBrandsTagsData)
+    }, [types, brands])
     // ID удаляемого товара
     let [id, setId] = useState(0)
     let [isModalOpen, setIsModalOpen] = useState(false)
@@ -92,10 +114,10 @@ const ItemsPage = () => {
         if (response.status === 200) {
             setLoading(true)
             try {
-                let response2 = await GetItemsAPI(offset, limit)
+                let response2 = await GetItemsAPI(offset, limit, brandTags, typeTags, searchValue)
                 if (response2.status === 200) {
                     setItems(response2.data.items)
-                    setAmount(response2.data.itemsAmount)
+                    setTotal(response2.data.itemsAmount)
                 }
             } catch (e) {
                 console.log(e)
@@ -108,7 +130,7 @@ const ItemsPage = () => {
     }
     let fetchItems = async () => {
         try {
-            let response = await GetItemsAPI(offset, limit, brandId, typeId, searchValue)
+            let response = await GetItemsAPI(offset, limit, brandTags, typeTags, searchValue)
             if (response.status === 200) {
                 setItems(response.data.items)
                 setTotal(response.data.itemsAmount)
@@ -119,7 +141,7 @@ const ItemsPage = () => {
     }
     useEffect(() => {
         fetchItems()
-    }, [offset, limit, total, brandId, typeId, searchValue])
+    }, [offset, limit, total, brandId, typeId, searchValue, typeTags, brandTags])
     return <div>
         <Header />
         <div style={{ display: 'flex', flexDirection: 'row', height: '100vh' }}>
@@ -135,7 +157,8 @@ const ItemsPage = () => {
             <Menu>
                 <SearchInput setSearchValue={setSearchValue} />
                 <Button onClick={() => { navigate('/items/create') }}>Создать</Button>
-                <Tags name='Производители' setTags={setTypeTags} tagsData={typesTagsData}/>
+                <Tags name='Категории' setTags={setTypeTags} tagsData={typesTagsData}/>
+                <Tags name='Производители' setTags={setBrandTags} tagsData={brandsTagsData}/>
             </Menu>
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                 <Pagination defaultCurrent={1} defaultPageSize={5} total={total} onChange={(page) => { setOffset((page - 1) * limit) }} onShowSizeChange={(e, e2) => console.log(e, e2)} />

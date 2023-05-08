@@ -12,6 +12,7 @@ import GetItemsAPI from "../../../Shared/api/GetItemsAPI"
 import { Item_T } from "../../../Shared/lib/types"
 import PaginationF from "../../../Shared/UI/Pagination/pagination"
 import Tags from "../../../Shared/UI/Tags"
+import AddToBasketAPI from "../../../Shared/api/AddToBasket"
 
 const ShopPage = observer(() => {
     let { userState } = useContext(Context)
@@ -48,10 +49,21 @@ const ShopPage = observer(() => {
     let [typeTags, setTypeTags]: [Array<number>, any] = useState([])
     let [total, setTotal] = useState(0)
     let [searchValue, setSearchValue] = useState('')
+
+
+    let addToBasket = async (id: number) => {
+        try {
+            let response = await AddToBasketAPI(id)
+            if(response.status === 200) {
+                fetchItems()
+            }
+        } catch(e) {
+            console.log(e)
+        }
+    }
     let fetchItems = async () => {
         try {
-            let response = await GetItemsAPI(offset, limit, 0, 0, searchValue)
-            console.log(response.data)
+            let response = await GetItemsAPI(offset, limit, brandTags, typeTags, searchValue)
             if (response.status === 200) {
                 setItems(response.data.items)
                 setTotal(response.data.itemsAmount)
@@ -61,9 +73,6 @@ const ShopPage = observer(() => {
         }
 
     }
-    useEffect(() => {
-
-    }, [])
     useEffect(() => {
         fetchItems()
     }, [offset, limit, total, searchValue, brandTags, typeTags])
@@ -78,16 +87,17 @@ const ShopPage = observer(() => {
         a()
     }, [])
     return <div>
-        <MainTemplate BodyChildren={<>
-            <PaginationF limit={limit} setOffset={setOffset} total={total} />
-            <ItemsShowcase items={items} />
-        </>
-        } MenuChildren={<>
+        <MainTemplate MenuChildren={<>
             <SearchInput setSearchValue={setSearchValue} />
             {/* <Tags name="Категории" tagsData={} setTags={setTypeTags}/>
             <Tags name="Производители" setTags={setBrandTags}/> */}
         </>
-        } />
+        }>
+            <>
+                <PaginationF limit={limit} setOffset={setOffset} total={total} />
+                <ItemsShowcase addToBasket={addToBasket} items={items} />
+            </>
+        </MainTemplate>
     </div>
 })
 
