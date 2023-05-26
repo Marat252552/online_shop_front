@@ -53,9 +53,10 @@ const BrandsPage = (props: {openNotif: (message: string) => void}) => {
     let navigate = useNavigate()
     return <div>
         <MainTemplate
-            BodyChildren={<MakeTable amount={amount} brands={brands} deleteBrand={deleteBrand} limit={limit} setOffset={setOffset} openNotif={props.openNotif}/>}
             MenuChildren={<Button type='dashed' onClick={() => { navigate('/brands/create') }}>Создать</Button>}
-        ></MainTemplate>
+        >
+            <MakeTable amount={amount} brands={brands} deleteBrand={deleteBrand} limit={limit} setOffset={setOffset} openNotif={props.openNotif}/>
+        </MainTemplate>
     </div>
 }
 

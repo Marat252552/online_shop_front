@@ -38,7 +38,7 @@ const MainTemplate = (props: {MenuChildren?: any, children?: any}) => {
                 {props.MenuChildren}
             </Menu>
             <div style={{width: '100%'}}>
-                {React.cloneElement(props.children, { openNotif })}
+                {(props.children)? React.cloneElement(props.children, { openNotif }) : undefined}
             </div> 
         </div>
     </div>
