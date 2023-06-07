@@ -48,7 +48,8 @@ const CreateBrandPage: React.FC = () => {
                     <Input />
                 </Form.Item>
 
-                <input type='file' onChange={(e) => {setFile(e.target.files[0])}}/>
+                <input type='file' onChange={(e: any) => {setFile(e.target.files[0])}}/>
+                
                 <Form.Item label="Button" >
                     <Button htmlType="submit">Создать</Button>
                 </Form.Item>
